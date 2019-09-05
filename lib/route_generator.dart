@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neostore/Pages/Dashboard/dashboard_screen.dart';
+import 'package:neostore/Pages/DetailPage/detail_page.dart';
 import 'package:neostore/Pages/DetailPage/dummy.dart';
 import 'package:neostore/Pages/ListingPage/list_screen.dart';
 import 'package:neostore/Pages/Registration/registration_screen.dart';
@@ -47,11 +48,16 @@ class RouteGenerator {
       case '/dummy':
         return SlideRightRoute(widget: Dummy());
       case '/listpage':
-      print(args);
         if (args is dynamic) {
           return SlideRightRoute(widget: ListScreen(args));
         }
         return _errorRoute();
+
+       case '/detailpage':
+        if (args is dynamic) {
+          return SlideRightRoute(widget: DetailPage(args));
+        }
+        return _errorRoute(); 
 
       default:
         // If there is no such named route in the switch statement, e.g. /third

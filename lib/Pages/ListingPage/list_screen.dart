@@ -69,7 +69,10 @@ class _ListScreen extends State<ListScreen> {
 
   Widget _buildProductItem(BuildContext context, int index) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, "/detailpage",
+            arguments: listData['product'][index]);
+      },
       child: Container(
         padding: EdgeInsets.all(10.0),
         width: double.infinity,
@@ -81,16 +84,19 @@ class _ListScreen extends State<ListScreen> {
           children: <Widget>[
             Expanded(
               flex: 2,
-              child: CachedNetworkImage(
-                imageUrl:
-                    "${Urls.baseUrl}${listData['product'][index]['product_image'][0]}",
-                placeholder: (context, url) => new Center(
-                  child: CircularProgressIndicator(
-                    valueColor:
-                        new AlwaysStoppedAnimation<Color>(Colors.redAccent),
+              child: Hero(
+                tag: 'product-${listData['product'][index]['_id']}',
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "${Urls.baseUrl}${listData['product'][index]['product_image'][0]}",
+                  placeholder: (context, url) => new Center(
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.redAccent),
+                    ),
                   ),
+                  errorWidget: (context, url, error) => new Icon(Icons.error),
                 ),
-                errorWidget: (context, url, error) => new Icon(Icons.error),
               ),
             ),
             Expanded(
@@ -103,11 +109,14 @@ class _ListScreen extends State<ListScreen> {
                   children: <Widget>[
                     Expanded(
                       flex: 1,
-                      child: Text(
-                        '${listData['product'][index]['product_name']}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22.0,
+                      child: Hero(
+                        tag: 'product-${listData['product'][index]['_id']}-nam',
+                        child: Text(
+                          '${listData['product'][index]['product_name']}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                          ),
                         ),
                       ),
                     ),
@@ -129,7 +138,7 @@ class _ListScreen extends State<ListScreen> {
                           Expanded(
                             flex: 3,
                             child: Text(
-                              'Rs : ${listData['product'][index]['product_cost']}',
+                              'Rs. ${listData['product'][index]['product_cost']}',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24.0,
@@ -138,22 +147,22 @@ class _ListScreen extends State<ListScreen> {
                             ),
                           ),
                           Expanded(
-                              flex: 2,
-                              child: SmoothStarRating(
-                                  allowHalfRating: false,
-                                  onRatingChanged: null,
-                                  starCount: 5,
-                                  rating: listData['product'][index]['rating']
-                                      .toDouble(),
-                                  // rating: 4.0,
-                                  size: 20.0,
-                                  color: Colors.redAccent,
-                                  borderColor: Colors.red,
-                                  spacing: 0.0)
-                              // child: Text(
-                              //   '${listData['product'][index]['rating']}',
-                              // ),
-                              ),
+                            flex: 2,
+                            child: SmoothStarRating(
+                                allowHalfRating: false,
+                                onRatingChanged: null,
+                                starCount: 5,
+                                rating: listData['product'][index]['rating']
+                                    .toDouble(),
+                                // rating: 4.0,
+                                size: 20.0,
+                                color: Colors.redAccent,
+                                borderColor: Colors.red,
+                                spacing: 0.0),
+                            // child: Text(
+                            //   '${listData['product'][index]['rating']}',
+                            // ),
+                          ),
                         ],
                       ),
                     )
