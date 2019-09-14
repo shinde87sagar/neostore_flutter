@@ -5,10 +5,12 @@ import 'package:neostore/constants/urls.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:share/share.dart';
 
-
 class DetailPage extends StatefulWidget {
   final product;
-  DetailPage(this.product) {}
+  DetailPage(this.product) {
+    // print(product['images']);
+    // print(product['images'].length);
+  }
   @override
   State<StatefulWidget> createState() {
     return _DetailPage(product);
@@ -19,7 +21,7 @@ class _DetailPage extends State<DetailPage> {
   var product, currentImage;
 
   _DetailPage(this.product) {
-    currentImage = product['product_image'][0];
+    currentImage = product['images'][0]['ImgURL'];
   }
 
   @override
@@ -55,7 +57,8 @@ class _DetailPage extends State<DetailPage> {
                       ),
                     ),
                     Text(
-                      'Category : ${product['category_id']['category_name']}',
+                      // 'Category : ${product['category_name']}',
+                      'Category',
                       style: TextStyle(fontSize: 16.0),
                     ),
                     Row(
@@ -67,7 +70,7 @@ class _DetailPage extends State<DetailPage> {
                             allowHalfRating: false,
                             onRatingChanged: null,
                             starCount: 5,
-                            rating: product['rating'].toDouble(),
+                            rating: product['product_avg_rating'].toDouble(),
                             // rating: 4.0,
                             size: 20.0,
                             color: Colors.redAccent,
@@ -132,20 +135,24 @@ class _DetailPage extends State<DetailPage> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                              HeroPhotoViewWrapper(
-                                              imageProvider: NetworkImage("${Urls.baseUrl}$currentImage"),
-                                              loadingChild: Center(child: CircularProgressIndicator(),),
-                                              heroTag : 'product-${product['_id']}',
+                                                HeroPhotoViewWrapper(
+                                              imageProvider:
+                                                  NetworkImage("$currentImage"),
+                                              loadingChild: Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                              heroTag:
+                                                  'product-${product['_id']}',
                                             ),
                                           ));
                                     },
                                     child: SizedBox(
                                       height: 200,
                                       child: Hero(
-                                        tag: 'product-${product['_id']}',
+                                        tag: 'product-${product['id']}',
                                         child: CachedNetworkImage(
-                                          imageUrl:
-                                              "${Urls.baseUrl}$currentImage",
+                                          imageUrl: "$currentImage",
                                           placeholder: (context, url) =>
                                               new Center(
                                             child: CircularProgressIndicator(
@@ -167,12 +174,13 @@ class _DetailPage extends State<DetailPage> {
                                     height: 100,
                                     child: ListView(
                                       scrollDirection: Axis.horizontal,
-                                      children: product['product_image']
+                                      children: product['images']
                                           .map<Widget>((image) {
                                         return InkWell(
                                           onTap: () {
                                             setState(() {
-                                              currentImage = image;
+                                              currentImage =
+                                                  image['ThumbURL250'];
                                             });
                                           },
                                           child: Container(
@@ -186,22 +194,23 @@ class _DetailPage extends State<DetailPage> {
                                                         ? Colors.red
                                                         : Colors.black12)),
                                             child: CachedNetworkImage(
-                                              imageUrl:
-                                                  "${Urls.baseUrl}${image}",
-                                              placeholder: (context, url) =>
-                                                  new Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  valueColor:
-                                                      new AlwaysStoppedAnimation<
-                                                              Color>(
-                                                          Colors.redAccent),
-                                                ),
-                                              ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      new Icon(Icons.error),
-                                            ),
+                                                imageUrl:
+                                                    "${image['ThumbURL100']}",
+                                                placeholder: (context, url) =>
+                                                    new Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        valueColor:
+                                                            new AlwaysStoppedAnimation<
+                                                                Color>(
+                                                          Colors.redAccent,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                errorWidget:
+                                                    (context, url, error) {
+                                                  return Icon(Icons.error);
+                                                }),
                                           ),
                                         );
                                       }).toList(),
@@ -225,7 +234,7 @@ class _DetailPage extends State<DetailPage> {
                                     ),
                                   ),
                                   Text(
-                                    product['prod_desc'],
+                                    product['product_description'],
                                     style: TextStyle(
                                       fontSize: 18,
                                     ),

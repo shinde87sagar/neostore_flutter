@@ -9,6 +9,7 @@ import 'package:neostore/utilsUI/Animations/rotation_route.dart';
 import 'package:neostore/utilsUI/Animations/slide_right_route.dart';
 import './Pages/Login/login_screen.dart';
 import './splashscreen.dart';
+import 'Pages/QuickView/quick_view.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -65,6 +66,15 @@ class RouteGenerator {
           return SlideRightRoute(widget: Account(args));
         // }
         // return _errorRoute();
+
+      case '/quickview':
+      return PageRouteBuilder(
+          barrierColor: Colors.black.withOpacity(0.5),
+          opaque: false,
+          barrierDismissible: true,
+          pageBuilder: (BuildContext context, _, __) {
+            return QuickView(item: args);
+          }); 
 
       default:
         // If there is no such named route in the switch statement, e.g. /third
