@@ -70,6 +70,7 @@ class ApiCalls {
 
   static Future<dynamic>getProducts(categoryId) async {
     print(categoryId);
-    return await _get('${Urls.baseUrl}${Urls.findProducts}?category_id=$categoryId');
+    return await _get('${Urls.baseUrl}${Urls.products}{"categoryId":"$categoryId","include":"images"}');
+    // return await _get('${Urls.baseUrl}${Urls.findProducts}?category_id=$categoryId');
   }
 }

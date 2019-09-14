@@ -24,20 +24,27 @@ class _Menu extends State<Menu> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    SizedBox(
-                      height: 100,
-                      width: 100,
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            "${Urls.baseUrl}${widget.userObj['data']['profile_img']}",
-                        imageBuilder: (context, imageProvider) =>
-                            new CircleAvatar(
-                          backgroundImage: imageProvider,
-                          backgroundColor: Colors.black87,
+                    InkWell(
+                      onTap: () {
+                        print('Account Called');
+                        Navigator.pushNamed(context, '/account', arguments: widget.userObj['data']);
+                      },
+                      child: SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              "${Urls.baseUrl}${widget.userObj['data']['profile_img']}",
+                          imageBuilder: (context, imageProvider) =>
+                              new CircleAvatar(
+                            backgroundImage: imageProvider,
+                            backgroundColor: Colors.black87,
+                          ),
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                         ),
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                     ),
                     new Text(

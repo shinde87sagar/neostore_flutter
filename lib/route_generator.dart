@@ -4,6 +4,7 @@ import 'package:neostore/Pages/DetailPage/detail_page.dart';
 import 'package:neostore/Pages/DetailPage/dummy.dart';
 import 'package:neostore/Pages/ListingPage/list_screen.dart';
 import 'package:neostore/Pages/Registration/registration_screen.dart';
+import 'package:neostore/Pages/User/Account/account.dart';
 import 'package:neostore/utilsUI/Animations/rotation_route.dart';
 import 'package:neostore/utilsUI/Animations/slide_right_route.dart';
 import './Pages/Login/login_screen.dart';
@@ -53,11 +54,17 @@ class RouteGenerator {
         }
         return _errorRoute();
 
-       case '/detailpage':
+      case '/detailpage':
         if (args is dynamic) {
           return SlideRightRoute(widget: DetailPage(args));
         }
-        return _errorRoute(); 
+        return _errorRoute();
+
+      case '/account':
+        // if (args is dynamic) {
+          return SlideRightRoute(widget: Account(args));
+        // }
+        // return _errorRoute();
 
       default:
         // If there is no such named route in the switch statement, e.g. /third

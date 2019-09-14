@@ -21,7 +21,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreen extends State<DashboardScreen> {
-  dynamic categoryList = {'product': []};
+  dynamic categoryList = [];
   final globalLoader = getIt.get<Loader>();
 
   _DashboardScreen() {
@@ -34,6 +34,7 @@ class _DashboardScreen extends State<DashboardScreen> {
     setState(() {
       categoryList = res;
     });
+    // print(categoryList);
     globalLoader.setLoading(false);
   }
 
@@ -53,20 +54,31 @@ class _DashboardScreen extends State<DashboardScreen> {
               Column(children: <Widget>[
                 SizedBox(
                     height: 250.0,
-                    child: categoryList['product'].length == 0
+                    child: categoryList.length == 0
                         ? null
                         : CarouselSlider(
                             viewportFraction: 1.0,
                             enlargeCenterPage: false,
-                            items:
-                                categoryList['product'].map<Widget>((category) {
+                            items: categoryList.map<Widget>((category) {
+                              var categoryImg = category['images'] != null
+                                  ? category['images']['ThumbURL']
+                                  : 'https://steemitimages.com/DQmbFAKjCq1GWcT8qxs3NWXo5zJywJcVv9Eec35euxMs41F/flutter-logo.jpg';
                               return Builder(
                                 builder: (BuildContext context) {
                                   return Container(
+                                    width: double.infinity,
                                     color: Colors.black87.withOpacity(0.4),
                                     child: CachedNetworkImage(
-                                      imageUrl:
-                                          "${Urls.baseUrl}/${category['category_image']}",
+                                      imageUrl: "$categoryImg",
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
                                       placeholder: (context, url) => new Center(
                                         child: CircularProgressIndicator(
                                           valueColor:
@@ -81,24 +93,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                                 },
                               );
                             }).toList(),
-                          )
-                    // Carousel(
-                    //     images: categoryList['product'].map((category) {
-                    //       if (category.containsKey('category_image') ==
-                    //           true) {
-                    //         return NetworkImage(
-                    //           "${Urls.baseUrl}/${category['category_image']}",
-                    //         );
-                    //       } else {
-                    //         return NetworkImage(
-                    //             'https://cdn-images-1.medium.com/max/2000/1*GqdzzfB_BHorv7V2NV7Jgg.jpeg');
-                    //       }
-                    //     }).toList(),
-                    //     autoplay: false,
-                    //     animationCurve: Curves.easeIn,
-                    //     dotSpacing: 40.0,
-                    //   ),
-                    ),
+                          )),
                 Expanded(
                   child: GridView.count(
                     crossAxisCount: 2,
@@ -107,10 +102,9 @@ class _DashboardScreen extends State<DashboardScreen> {
                     padding: const EdgeInsets.all(5.0),
                     mainAxisSpacing: 2.0,
                     crossAxisSpacing: 2.0,
-                    children: List<Widget>.generate(
-                        categoryList['product'].length, (index) {
-                      return _gridBuilder(
-                          categoryList['product'][index], index);
+                    children:
+                        List<Widget>.generate(categoryList.length, (index) {
+                      return _gridBuilder(categoryList[index], index);
                     }),
                   ),
                 )
@@ -122,6 +116,7 @@ class _DashboardScreen extends State<DashboardScreen> {
 
   _gridBuilder(gridItem, index) {
     var posiHorizontal = index % 2;
+    // print(gridItem);
     return GridTile(
       child: Card(
         color: Colors.red,
